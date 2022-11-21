@@ -1,5 +1,7 @@
 # Kafka Docker Compose Utilities
 
+This directory contains the docker compose utilities for Apache Kafka for single and cluster environment.
+
 ## Single Zookeeper / Single Kafka
 This configuration fits most development requirements.
 
