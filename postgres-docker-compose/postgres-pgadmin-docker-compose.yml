@@ -1,0 +1,29 @@
+version: '2.1'
+
+services:
+  postgres:
+    image: postgres:15.1
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '5432:5432'
+
+  pgadmin:
+    image: dpage/pgadmin4:6.17
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=your@email.com
+      - PGADMIN_DEFAULT_PASSWORD=YOUR_OWN_PWD
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '80:80'
+      - '90:90'
