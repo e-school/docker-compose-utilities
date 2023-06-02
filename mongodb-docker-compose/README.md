@@ -1,4 +1,4 @@
-# Postgres docker-compose utilities
+# Mongodb docker-compose utilities
 
 This directory contains the docker compose utilities for mongodb database single and cluster environment.
 
