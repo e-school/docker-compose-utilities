@@ -10,8 +10,8 @@ This configuration fits most development requirements.
 
 Run with:
 ````
-docker-compose -f zookeepeer-single-kafka-single.yml up
-docker-compose -f zookeepeer-single-kafka-single.yml down
+docker-compose -f zookeeper-single-kafka-single.yml up
+docker-compose -f zookeeper-single-kafka-single.yml down
 ````
 
 ## Single Zookeeper / Multiple Kafka
@@ -22,8 +22,8 @@ If you want to have three brokers and experiment with kafka replication / fault-
 
 Run with:
 ````
-docker-compose -f zookeepeer-single-kafka-multiple.yml up
-docker-compose -f zookeepeer-single-kafka-multiple.yml down
+docker-compose -f zookeeper-single-kafka-multiple.yml up
+docker-compose -f zookeeper-single-kafka-multiple.yml down
 ````
 
 ## Multiple Zookeeper / Single Kafka
@@ -34,8 +34,8 @@ If you want to have three zookeeper nodes and experiment with zookeeper fault-to
 
 Run with:
 ````
-docker-compose -f zookeepeer-multiple-kafka-single.yml up
-docker-compose -f zookeepeer-multiple-kafka-single.yml down
+docker-compose -f zookeeper-multiple-kafka-single.yml up
+docker-compose -f zookeeper-multiple-kafka-single.yml down
 ````
 
 ## Multiple Zookeeper / Multiple Kafka
@@ -46,6 +46,6 @@ If you want to have three zookeeper nodes and three kafka brokers to experiment 
 
 Run with:
 ````
-docker-compose -f zookeepeer-multiple-kafka-multiple.yml up
-docker-compose -f zookeepeer-multiple-kafka-multiple.yml down
+docker-compose -f zookeeper-multiple-kafka-multiple.yml up
+docker-compose -f zookeeper-multiple-kafka-multiple.yml down
 ````
