@@ -2,7 +2,7 @@
 
 This directory contains the docker compose utilities for mongodb database single and cluster environment.
 
-## Single Mongodb Environment with Adminer
+## Single Mongodb Environment with MongoExpress
 NOTE: This configuration fits most development requirements, not recommended for production usage.
 
 - mongodb tcp/ip connection available at $DOCKER_HOST_IP:27017
