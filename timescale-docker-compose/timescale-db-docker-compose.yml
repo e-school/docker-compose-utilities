@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  timescaledb:
+    image: timescale/timescaledb:latest-pg12
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      TIMESCALEDB_TELEMETRY: 'off'
+      POSTGRES_USER: timescaledb
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgresdata:/home/postgres/pgdata/data/
+volumes:
+  postgresdata:
+    external: false
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/Users/kkommul/work/data/db-data'
