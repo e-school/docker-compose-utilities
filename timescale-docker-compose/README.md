@@ -19,4 +19,5 @@ docker-compose -f timescale-db-docker-compose.yml down ## To stop and remove the
 Timescale has support for wide variety of programming languages such as Node, Java PythonRuby Golang etc.., below page describes the client libraries
 https://docs.timescale.com/quick-start/latest/
 
+### replace "path-to-db-data-directory" with your local path where you want to store the data
 ## Note: This configuration NOT recommended for production usage, it's only for development and get yourself familiarised with Timescale DB
