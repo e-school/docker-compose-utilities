@@ -1,0 +1,99 @@
+x-common-labels: &common-labels                                      ## Define project metadata 
+  com.example.partOf: "cassandra-cluster-local"
+  com.example.environment: "development"
+
+x-common-image: &cassandra-image                                     ## Define image version/tag
+  cassandra:5.0                                               
+
+x-common-environment: &cassandra-environment                         ## Define environment variables
+  - CASSANDRA_SEEDS=cassandra-node-1                                 ## Nominate this node as seed node
+  - CASSANDRA_LISTEN_ADDRESS=auto                                    ## The IP address to listen for incoming connections
+  - CASSANDRA_CLUSTER_NAME=cassandra-cluster-local-1                 ## Local cluster name
+  - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch            ## Automatically propogate information to other nodes via gossip protocol
+  - CASSANDRA_DC=datacenter-1                                        ## Assumes nodes on same datacenter and rack for cassandra snitch
+  - CASSANDRA_RACK=rack-1
+ 
+x-common-healthcheck: &cassandra-node-healthcheck                    ## Use nodetool to determine health status
+  test: ["CMD-SHELL", "nodetool status"]
+  interval: 2m
+  start_period: 2m
+  timeout: 10s
+  retries: 3
+
+networks:
+  cassandra-network:                                                 ## Isolate containers from other networks
+    labels: *common-labels
+    name: cassandra-network
+    driver: bridge
+
+services:
+  cassandra-1:
+    labels: *common-labels
+    image: *cassandra-image
+    container_name: cassandra-node-1                                 ## First container node in the cluster
+    hostname: cassandra-node-1
+    ports: 
+      - 9042:9042                                                    ## Cassandra client port
+      - 9160:9160                                                    ## Cassandra Thrift client port
+      - 7199:7199                                                    ## Cassandra JMX monitoring port
+    volumes:                                                         ## Mount docker volume to persist data
+      - cassandra-volume-1:/var/lib/cassandra:rw
+    environment: *cassandra-environment
+    healthcheck: *cassandra-node-healthcheck
+    restart: on-failure                                              ## Restart when container exits with error
+    networks:                                                        ## Run in user defined network
+      - cassandra-network
+
+  cassandra-2:
+    labels: *common-labels
+    image: *cassandra-image
+    container_name: cassandra-node-2                                 ## Second container node in the cluster
+    hostname: cassandra-node-2
+    ports: 
+      - 9043:9042                                                    ## Cassandra client port. Avoid port conflicts, if nodes run on same machine
+      - 9161:9160                                                    ## Cassandra Thrift client port
+      - 7200:7199                                                    ## Cassandra JMX monitoring port
+    volumes:                                                         ## Mount docker volume to persist data
+      - cassandra-volume-2:/var/lib/cassandra:rw
+    environment: *cassandra-environment
+    healthcheck: *cassandra-node-healthcheck
+    restart: on-failure                                              ## Restart when container exits with error
+    depends_on:                                                      ## Defines start up order, wait for cassandra-1 health check to pass
+      cassandra-1:
+        condition: service_healthy
+    networks:                                                        ## Run in user defined network
+      - cassandra-network
+
+  cassandra-3:
+    labels: *common-labels
+    image: *cassandra-image
+    container_name: cassandra-node-3                                 ## Third container node in the cluster
+    hostname: cassandra-node-3
+    ports: 
+      - 9044:9042                                                    ## Cassandra client port. Avoid port conflicts, if nodes run on same machine
+      - 9162:9160                                                    ## Cassandra Thrift client port
+      - 7201:7199                                                    ## Cassandra JMX monitoring port
+    volumes:                                                         ## Mount docker volume to persist data
+      - cassandra-volume-3:/var/lib/cassandra:rw
+    environment: *cassandra-environment
+    healthcheck: *cassandra-node-healthcheck
+    restart: on-failure                                              ## Restart when container exits with error
+    depends_on:                                                      ## Defines start up order, wait for cassandra-2 health check to pass
+      cassandra-2:
+        condition: service_healthy
+    networks:                                                        ## Run in user defined network
+      - cassandra-network
+  
+volumes:                                                             ## Docker managed volume specifications
+  cassandra-volume-1:
+    labels: *common-labels
+    name: cassandra-volume-1
+    driver: local                                                    ## Prefer volume on host machine
+  cassandra-volume-2:
+    labels: *common-labels
+    name: cassandra-volume-2
+    driver: local                                                    ## Prefer volume on host machine
+  cassandra-volume-3:
+    labels: *common-labels
+    name: cassandra-volume-3
+    driver: local                                                    ## Prefer volume on host machine
